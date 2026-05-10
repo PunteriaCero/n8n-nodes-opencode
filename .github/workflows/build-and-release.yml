@@ -41,37 +41,52 @@ jobs:
           tar -czf ../n8n-opencode-node-v${{ steps.version.outputs.VERSION }}.tar.gz .
           cd ..
       
+      - name: Configure git
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          git config user.name "OpenCode Bot"
+          git config user.email "bot@opencode.ai"
+      
+      - name: Create and push tag
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          VERSION=${{ steps.version.outputs.VERSION }}
+          TAG="v${VERSION}"
+          
+          # Check if tag exists
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "Tag $TAG already exists"
+          else
+            git tag -a "$TAG" -m "Release $TAG"
+            git push origin "$TAG"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
       - name: Create GitHub Release
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           VERSION=${{ steps.version.outputs.VERSION }}
           TAG="v${VERSION}"
           
-          # Create annotated tag
-          git tag -a "$TAG" -m "Release $TAG" || git tag -d "$TAG" && git tag -a "$TAG" -m "Release $TAG"
-          git push origin "$TAG" || true
+          # Create release using gh CLI (should be installed by default)
+          if ! command -v gh &> /dev/null; then
+            echo "gh CLI not found, installing..."
+            curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+            echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+            sudo apt update
+            sudo apt install gh
+          fi
           
-          # Create release using GitHub API
-          curl -X POST https://api.github.com/repos/${{ github.repository }}/releases \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github+json" \
-            -d "{
-              \"tag_name\": \"$TAG\",
-              \"name\": \"Release $TAG\",
-              \"body\": \"## Installation\n\nDownload and extract the \\\`n8n-opencode-node-v${VERSION}.tar.gz\\\` file.\n\nSee [GITHUB_RELEASES.md](https://github.com/hlavrencic/n8n-nodes-opencode/blob/main/GITHUB_RELEASES.md) for installation instructions.\",
-              \"draft\": false,
-              \"prerelease\": false
-            }" || echo "Release might already exist"
-      
-      - name: Upload release asset
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: |
-          VERSION=${{ steps.version.outputs.VERSION }}
-          TAG="v${VERSION}"
-          RELEASE_ID=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/tags/$TAG \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" | jq '.id')
-          
-          curl -X POST "https://api.github.com/repos/${{ github.repository }}/releases/${RELEASE_ID}/assets" \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Content-Type: application/gzip" \
-            --data-binary @"n8n-opencode-node-v${VERSION}.tar.gz" || echo "Asset might already exist"
+          gh release create "$TAG" \
+            "n8n-opencode-node-v${VERSION}.tar.gz" \
+            --repo "${{ github.repository }}" \
+            --title "Release v${VERSION}" \
+            --notes "## Installation
+
+Download and extract the \`n8n-opencode-node-v${VERSION}.tar.gz\` file.
+
+See [GITHUB_RELEASES.md](https://github.com/hlavrencic/n8n-nodes-opencode/blob/main/GITHUB_RELEASES.md) for installation instructions." \
+            || echo "Release already exists"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
