@@ -67,23 +67,23 @@ jobs:
           cd ..
       
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: v${{ steps.version.outputs.VERSION }}
-          name: Release v${{ steps.version.outputs.VERSION }}
-          body: |
-            ## Installation
-            
-            1. Download `n8n-opencode-node-v${{ steps.version.outputs.VERSION }}.tar.gz` from this release
-            2. Extract to your n8n custom nodes directory:
-               - On CasaOS: `/DATA/AppData/n8n/`
-               - On Docker: `/home/node/.n8n/nodes/`
-               - Locally: `~/.n8n/nodes/`
-            3. Restart n8n
-            
-            ## What's new
-            Check [CHANGELOG.md](https://github.com/hlavrencic/n8n-nodes-opencode/blob/main/CHANGELOG.md) for details.
-          files: |
-            n8n-opencode-node-v${{ steps.version.outputs.VERSION }}.tar.gz
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          TAG="v${VERSION}"
+          
+          # Check if tag already exists
+          git tag "$TAG" || true
+          git push origin "$TAG" || true
+          
+          # Create release using GitHub CLI
+          gh release create "$TAG" \
+            "n8n-opencode-node-v${VERSION}.tar.gz" \
+            --title "Release ${TAG}" \
+            --notes "## Installation
+
+Download and extract the \`n8n-opencode-node-v${VERSION}.tar.gz\` file.
+
+See [GITHUB_RELEASES.md](https://github.com/hlavrencic/n8n-nodes-opencode/blob/main/GITHUB_RELEASES.md) for installation instructions." \
+            || echo "Release already exists"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
