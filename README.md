@@ -2,6 +2,26 @@
 
 OpenCode custom node for n8n. Enables n8n workflows to seamlessly execute tasks in OpenCode with session management, error handling, and retry logic.
 
+## Quick Start (Recommended)
+
+**Download latest release:**
+```bash
+# Get the latest release from GitHub
+cd /path/to/n8n/nodes
+wget https://github.com/hlavrencic/n8n-nodes-opencode/releases/download/v1.0.0/n8n-opencode-node-v1.0.0.tar.gz
+tar -xzf n8n-opencode-node-v1.0.0.tar.gz
+
+# On CasaOS: /DATA/AppData/n8n/
+# Then restart n8n
+```
+
+**Or use npm:**
+```bash
+npm install n8n-nodes-opencode
+```
+
+[See all releases →](https://github.com/hlavrencic/n8n-nodes-opencode/releases)
+
 ## Overview
 
 This node provides a reusable, production-ready integration between n8n and OpenCode. Instead of making raw HTTP requests, workflows can now use the **OpenCode** node just like any other n8n node.
