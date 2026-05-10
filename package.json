@@ -2,7 +2,7 @@
   "name": "n8n-nodes-opencode",
   "version": "1.0.0",
   "description": "OpenCode node for n8n - execute tasks in OpenCode from workflows",
-  "author": "Your Name <your.email@example.com>",
+  "author": "PunteriaCero",
   "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -59,10 +59,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/n8n-nodes-opencode.git"
+    "url": "https://github.com/PunteriaCero/n8n-nodes-opencode.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/n8n-nodes-opencode/issues"
+    "url": "https://github.com/PunteriaCero/n8n-nodes-opencode/issues"
   },
-  "homepage": "https://github.com/yourusername/n8n-nodes-opencode#readme"
+  "homepage": "https://github.com/PunteriaCero/n8n-nodes-opencode#readme"
 }

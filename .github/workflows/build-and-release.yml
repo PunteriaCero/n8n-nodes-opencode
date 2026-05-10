@@ -1,4 +1,4 @@
-name: Build
+name: Build and Publish
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 permissions:
   contents: write
-  packages: read
+  packages: write
 
 jobs:
   build:
@@ -20,6 +20,7 @@ jobs:
         with:
           node-version: 20.x
           cache: 'npm'
+          registry-url: 'https://registry.npmjs.org'
       
       - run: npm ci --ignore-scripts --legacy-peer-deps
       
@@ -40,7 +41,12 @@ jobs:
         run: |
           cd dist && tar -czf ../n8n-opencode-node-v${{ steps.version.outputs.VERSION }}.tar.gz . && cd ..
       
-      - name: Release
+      - name: Publish to NPM
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           files: n8n-opencode-node-v${{ steps.version.outputs.VERSION }}.tar.gz
