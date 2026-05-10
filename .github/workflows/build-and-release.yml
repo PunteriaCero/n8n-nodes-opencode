@@ -45,7 +45,7 @@ jobs:
       
        - name: Publish to NPM
          id: publish
-         run: npm publish --access public
+         run: echo "Skipping npm publish temporarily for debugging"
          env:
            NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
          continue-on-error: true
