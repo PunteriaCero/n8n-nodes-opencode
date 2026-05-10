@@ -24,13 +24,13 @@ jobs:
       
       - run: npm ci --ignore-scripts --legacy-peer-deps
       
-       - name: Lint
-         run: npm run lint
-         continue-on-error: true
-       
-       - name: Tests
-         run: npm test
-         continue-on-error: true
+      - name: Lint
+        run: npm run lint
+        continue-on-error: true
+      
+      - name: Tests
+        run: npm test
+        continue-on-error: true
       
       - name: Build
         run: npm run build
@@ -43,12 +43,12 @@ jobs:
         run: |
           cd dist && tar -czf ../n8n-opencode-node-v${{ steps.version.outputs.VERSION }}.tar.gz . && cd ..
       
-       - name: Publish to NPM
-         id: publish
-         run: npm publish --access public
-         env:
-           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-         continue-on-error: true
+      - name: Publish to NPM
+        id: publish
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        continue-on-error: true
       
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
@@ -57,4 +57,3 @@ jobs:
           tag_name: v${{ steps.version.outputs.VERSION }}
           generate_release_notes: true
           token: ${{ secrets.GITHUB_TOKEN }}
-
