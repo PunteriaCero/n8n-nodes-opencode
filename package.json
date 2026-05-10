@@ -54,6 +54,10 @@
     "n8n-core": ">=2.20.0",
     "n8n-workflow": ">=2.20.0"
   },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "engines": {
     "node": ">=16.0.0"
   },
