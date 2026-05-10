@@ -1,6 +1,6 @@
 {
   "name": "@punteriacero/n8n-nodes-opencode",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "OpenCode node for n8n - execute tasks in OpenCode from workflows",
   "author": "PunteriaCero",
   "license": "MIT",
