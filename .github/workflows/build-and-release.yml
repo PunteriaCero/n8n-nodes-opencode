@@ -41,12 +41,11 @@ jobs:
         run: |
           cd dist && tar -czf ../n8n-opencode-node-v${{ steps.version.outputs.VERSION }}.tar.gz . && cd ..
       
-      - name: Publish to NPM
-        uses: JS-DevTools/npm-publish@v3
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
-          access: public
-          registry: https://registry.npmjs.org/
+      - name: Publish to NPM (optional)
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        continue-on-error: true
       
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
