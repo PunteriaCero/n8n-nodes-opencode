@@ -1,5 +1,5 @@
 {
-  "name": "n8n-nodes-opencode",
+  "name": "@punteria-cero/n8n-nodes-opencode",
   "version": "1.0.1",
   "description": "OpenCode node for n8n - execute tasks in OpenCode from workflows",
   "author": "PunteriaCero",
