@@ -1,0 +1,68 @@
+{
+  "name": "n8n-nodes-opencode",
+  "version": "0.1.0",
+  "description": "OpenCode node for n8n - execute tasks in OpenCode from workflows",
+  "author": "Your Name <your.email@example.com>",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint src/**/*.ts",
+    "format": "prettier --write src/**/*.ts"
+  },
+  "n8n": {
+    "nodes": [
+      "dist/nodes/OpenCode/OpenCode.node.js"
+    ],
+    "credentials": [
+      "dist/credentials/OpenCodeApi.credentials.js"
+    ]
+  },
+  "keywords": [
+    "n8n",
+    "n8n-nodes",
+    "opencode",
+    "automation",
+    "ai",
+    "workflow",
+    "agent"
+  ],
+  "devDependencies": {
+    "@types/jest": "^29.5.0",
+    "@types/node": "^18.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.59.0",
+    "@typescript-eslint/parser": "^5.59.0",
+    "eslint": "^8.39.0",
+    "jest": "^29.5.0",
+    "prettier": "^2.8.8",
+    "ts-jest": "^29.1.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "n8n-core": "^2.20.0",
+    "n8n-workflow": "^2.20.0"
+  },
+  "peerDependencies": {
+    "n8n-core": ">=2.20.0",
+    "n8n-workflow": ">=2.20.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/n8n-nodes-opencode.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/n8n-nodes-opencode/issues"
+  },
+  "homepage": "https://github.com/yourusername/n8n-nodes-opencode#readme"
+}
